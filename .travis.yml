@@ -21,3 +21,5 @@ after_success:
   - docker push jdraper29/multi-nginx
   - docker push jdraper29/multi-server
   - docker push jdraper29/multi-worker
+
+  # Having issues with pushing images up to docker
