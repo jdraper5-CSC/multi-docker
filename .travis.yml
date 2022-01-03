@@ -1,0 +1,23 @@
+sudo: required
+services:
+  - docker
+
+before install:
+  - docker build -t jdraper29/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true jdraper29/react-test npm test
+
+
+after_success:
+  - docker build -t jdraper29/multi-client ./client
+  - docker build -t jdraper29/multi-nginx ./nginx
+  - docker build -t jdraper29/multi-server ./server
+  - docker build -t jdraper29/multi-worker ./worker
+# Log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+# Take those images and push them to docker hub
+  - docker push jdraper29/multi-client
+  - docker push jdraper29/multi-nginx
+  - docker push jdraper29/multi-server
+  - docker push jdraper29/multi-worker
